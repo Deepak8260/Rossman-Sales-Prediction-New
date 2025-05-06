@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 venv/
 .env
-
+.venv/
 # IDEs
 .vscode/
 .idea/
@@ -17,3 +17,4 @@ notebooks/.ipynb_checkpoints/
 # System files
 .DS_Store
 
+output/
