@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# Project specific
+*.model
+model/
+data/raw/
+notebooks/.ipynb_checkpoints/
+
+# System files
+.DS_Store
+

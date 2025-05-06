@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rossman Sales Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Rossman Sales Prediction</h1>
+        
+        <form action="{{ url_for('predict') }}" method="post">
+            <!-- Store Information -->
+            <div class="form-section">
+                <h3>Store Information</h3>
+                <div class="form-group">
+                    <label>Store Number:</label>
+                    <input type="number" name="store" value="{{ request.form.store }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Store Type (0-3):</label>
+                    <input type="number" name="store_type" min="0" max="3" value="{{ request.form.store_type }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Assortment (0-2):</label>
+                    <input type="number" name="assortment" min="0" max="2" value="{{ request.form.assortment }}" required>
+                </div>
+            </div>
+
+            <!-- Date Information -->
+            <div class="form-section">
+                <h3>Date Information</h3>
+                <div class="form-group">
+                    <label>Day of Week (1-7):</label>
+                    <input type="number" name="day_of_week" min="1" max="7" value="{{ request.form.day_of_week }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Month (1-12):</label>
+                    <input type="number" name="month" min="1" max="12" value="{{ request.form.month }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Year:</label>
+                    <input type="number" name="year" min="2013" max="2025" value="{{ request.form.year }}" required>
+                </div>
+            </div>
+
+            <!-- Holiday Information -->
+            <div class="form-section">
+                <h3>Holiday Information</h3>
+                <div class="form-group">
+                    <label>State Holiday:</label>
+                    <select name="state_holiday" required>
+                        <option value="0" {% if request.form.state_holiday == '0' %}selected{% endif %}>No Holiday</option>
+                        <option value="1" {% if request.form.state_holiday == '1' %}selected{% endif %}>Public Holiday</option>
+                        <option value="2" {% if request.form.state_holiday == '2' %}selected{% endif %}>Easter</option>
+                        <option value="3" {% if request.form.state_holiday == '3' %}selected{% endif %}>Christmas</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>School Holiday:</label>
+                    <select name="school_holiday" required>
+                        <option value="0" {% if request.form.school_holiday == '0' %}selected{% endif %}>No</option>
+                        <option value="1" {% if request.form.school_holiday == '1' %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Competition Information -->
+            <div class="form-section">
+                <h3>Competition Details</h3>
+                <div class="form-group">
+                    <label>Competition Distance (meters):</label>
+                    <input type="number" name="competition_distance" value="{{ request.form.competition_distance }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Competition Open Since Month (1-12):</label>
+                    <input type="number" name="competition_open_since_month" min="1" max="12" value="{{ request.form.competition_open_since_month }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Competition Open Since Year:</label>
+                    <input type="number" name="competition_open_since_year" min="1900" max="2025" value="{{ request.form.competition_open_since_year }}" required>
+                </div>
+            </div>
+
+            <!-- Promotion Information -->
+            <div class="form-section">
+                <h3>Promotion Details</h3>
+                <div class="form-group">
+                    <label>Promo:</label>
+                    <select name="promo" required>
+                        <option value="0" {% if request.form.promo == '0' %}selected{% endif %}>No</option>
+                        <option value="1" {% if request.form.promo == '1' %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Promo2:</label>
+                    <select name="promo2" required>
+                        <option value="0" {% if request.form.promo2 == '0' %}selected{% endif %}>No</option>
+                        <option value="1" {% if request.form.promo2 == '1' %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Promo2 Since Week (1-52):</label>
+                    <input type="number" name="promo2_since_week" min="1" max="52" value="{{ request.form.promo2_since_week }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Promo2 Since Year:</label>
+                    <input type="number" name="promo2_since_year" min="2013" max="2025" value="{{ request.form.promo2_since_year }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Is Promo Month:</label>
+                    <select name="is_promo_month" required>
+                        <option value="0" {% if request.form.is_promo_month == '0' %}selected{% endif %}>No</option>
+                        <option value="1" {% if request.form.is_promo_month == '1' %}selected{% endif %}>Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Predict Sales</button>
+        </form>
+        
+        {% if prediction %}
+        <div class="prediction">
+            <h2>{{ prediction }}</h2>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
