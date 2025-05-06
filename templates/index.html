@@ -134,6 +134,12 @@
             <h2>{{ prediction }}</h2>
         </div>
         {% endif %}
+        
+        <!-- Add this link to view predictions -->
+        <div class="view-predictions">
+            <a href="{{ url_for('view_predictions') }}" class="predictions-link">View All Predictions</a>
+        </div>
     </div>
+    
 </body>
 </html>

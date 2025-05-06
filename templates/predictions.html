@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rossmann Predictions</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        .predictions-table {
+            width: 100%;
+            min-width: 1500px;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--surface-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .predictions-table th {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .predictions-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .predictions-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .predictions-table tr:hover {
+            background-color: rgba(126, 163, 204, 0.1);
+        }
+        
+        .bottom-nav {
+            margin-top: 2rem;
+            text-align: center;
+            padding-bottom: 2rem;
+        }
+        
+        .back-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(43, 76, 126, 0.3);
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .predictions-table td, 
+            .predictions-table th {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Rossmann Store Sales Predictions</h1>
+        
+        {% if predictions %}
+        <table class="predictions-table">
+            <thead>
+                <tr>
+                    <th>Store</th>
+                    <th>Store Type</th>
+                    <th>Assortment</th>
+                    <th>Day of Week</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>State Holiday</th>
+                    <th>School Holiday</th>
+                    <th>Competition Distance</th>
+                    <th>Competition Since Month</th>
+                    <th>Competition Since Year</th>
+                    <th>Promo</th>
+                    <th>Promo2</th>
+                    <th>Promo2 Since Week</th>
+                    <th>Promo2 Since Year</th>
+                    <th>Is Promo Month</th>
+                    <th>Predicted Sales</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prediction in predictions %}
+                <tr>
+                    <td>{{ prediction.features.store }}</td>
+                    <td>{% if prediction.features.store_type == 0 %}a
+                        {% elif prediction.features.store_type == 1 %}b
+                        {% elif prediction.features.store_type == 2 %}c
+                        {% elif prediction.features.store_type == 3 %}d
+                        {% endif %}</td>
+                    <td>{% if prediction.features.assortment == 0 %}Basic
+                        {% elif prediction.features.assortment == 1 %}Extra
+                        {% elif prediction.features.assortment == 2 %}Extended
+                        {% endif %}</td>
+                    <td>{% if prediction.features.day_of_week == 1 %}Monday
+                        {% elif prediction.features.day_of_week == 2 %}Tuesday
+                        {% elif prediction.features.day_of_week == 3 %}Wednesday
+                        {% elif prediction.features.day_of_week == 4 %}Thursday
+                        {% elif prediction.features.day_of_week == 5 %}Friday
+                        {% elif prediction.features.day_of_week == 6 %}Saturday
+                        {% elif prediction.features.day_of_week == 7 %}Sunday
+                        {% endif %}</td>
+                    <td>{% if prediction.features.month == 1 %}January
+                        {% elif prediction.features.month == 2 %}February
+                        {% elif prediction.features.month == 3 %}March
+                        {% elif prediction.features.month == 4 %}April
+                        {% elif prediction.features.month == 5 %}May
+                        {% elif prediction.features.month == 6 %}June
+                        {% elif prediction.features.month == 7 %}July
+                        {% elif prediction.features.month == 8 %}August
+                        {% elif prediction.features.month == 9 %}September
+                        {% elif prediction.features.month == 10 %}October
+                        {% elif prediction.features.month == 11 %}November
+                        {% elif prediction.features.month == 12 %}December
+                        {% endif %}</td>
+                    <td>{{ prediction.features.year }}</td>
+                    <td>{% if prediction.features.state_holiday == 0 %}No Holiday
+                        {% elif prediction.features.state_holiday == 1 %}Public Holiday
+                        {% elif prediction.features.state_holiday == 2 %}Easter
+                        {% elif prediction.features.state_holiday == 3 %}Christmas
+                        {% endif %}</td>
+                    <td>{% if prediction.features.school_holiday == 0 %}No
+                        {% elif prediction.features.school_holiday == 1 %}Yes
+                        {% endif %}</td>
+                    <td>{{ prediction.features.competition_distance }}m</td>
+                    <td>{{ prediction.features.competition_open_since_month }}</td>
+                    <td>{{ prediction.features.competition_open_since_year }}</td>
+                    <td>{% if prediction.features.promo == 0 %}No
+                        {% elif prediction.features.promo == 1 %}Yes
+                        {% endif %}</td>
+                    <td>{% if prediction.features.promo2 == 0 %}No
+                        {% elif prediction.features.promo2 == 1 %}Yes
+                        {% endif %}</td>
+                    <td>{{ prediction.features.promo2_since_week }}</td>
+                    <td>{{ prediction.features.promo2_since_year }}</td>
+                    <td>{% if prediction.features.is_promo_month == 0 %}No
+                        {% elif prediction.features.is_promo_month == 1 %}Yes
+                        {% endif %}</td>
+                    <td>${{ "%.2f"|format(prediction.predicted_sales) }}</td>
+                    <td>{{ prediction.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-message">
+            No predictions available yet. Make your first prediction!
+        </div>
+        {% endif %}
+
+        <div class="bottom-nav">
+            <a href="{{ url_for('home') }}" class="back-button">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

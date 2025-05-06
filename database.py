@@ -21,7 +21,13 @@ class Database:
         return self.predictions.insert_one(prediction_data)
 
     def get_all_predictions(self):
-        return list(self.predictions.find({}, {'_id': 0}))
+        try:
+            predictions = list(self.predictions.find({}, {'_id': 0}).sort('timestamp', -1))
+            #print("Retrieved predictions:", predictions)  # Add this line for debugging
+            return predictions
+        except Exception as e:
+            print(f"Error retrieving predictions: {e}")
+            return []
 
     def get_predictions_by_store(self, store_id):
         return list(self.predictions.find({'features.store': store_id}, {'_id': 0}))

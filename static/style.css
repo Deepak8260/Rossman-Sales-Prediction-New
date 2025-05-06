@@ -232,3 +232,20 @@ button:hover {
         font-size: 1.5rem;
     }
 }
+.view-predictions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.predictions-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.predictions-link:hover {
+    background-color: #45a049;
+}

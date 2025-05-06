@@ -68,5 +68,10 @@ def predict():
         return render_template('index.html', 
                              prediction=f'Predicted Sales: ${prediction[0]:.2f}')
 
+@app.route('/predictions')
+def view_predictions():
+    predictions = db.get_all_predictions()
+    return render_template('predictions.html', predictions=predictions)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
